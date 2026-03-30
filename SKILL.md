@@ -63,12 +63,16 @@ Auto-detect which type fits best, then confirm:
 > This looks like a **[type]** research. Correct?
 > (Options: product / marketing / production / research)
 
-### Step 3: Collect User Intuitions (Deep)
+### Step 3: Collect User Intuitions & Seed Sources (Deep)
 
 > Do you have any intuitions, hypotheses, or reference materials for this topic?
 > You can paste links, file paths, or describe your thinking. Say "done" when finished.
+>
+> If you already know of trusted guides, blog posts, or community threads — feel free to paste URLs. But don't worry if you don't — the research agent will **automatically scout for high-quality sources** before diving into research, using curated list searches, community forum searches, and expert blog discovery.
 
 Accept multiple rounds. Read any files or URLs the user provides. Accumulate all context.
+
+If the user provides URLs, separate them into a `{{SEED_SOURCES}}` list for injection into program.md. If no URLs provided, set `{{SEED_SOURCES}}` to "None provided — the agent will run Phase 0 Source Scouting to discover high-quality sources automatically."
 
 ### Step 4: Propose Research Lines
 
@@ -126,6 +130,7 @@ On confirm:
    - `{{CONTEXT}}` → accumulated user context from Step 3
    - `{{TOPIC_TYPE}}` → product/marketing/production/research
    - `{{RESEARCH_LINES}}` → confirmed lines (as numbered sections with sub-questions)
+   - `{{SEED_SOURCES}}` → user-provided URLs from Step 3 (or "None provided" if empty)
    - `{{LANGUAGE}}` → detected language
    - `{{MAX_CYCLES}}` → from scope selection
    - `{{OUTPUT_DIR}}` → the output directory path

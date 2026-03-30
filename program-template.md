@@ -20,23 +20,88 @@ The end product is `research.md` — a continuously growing, well-structured doc
 
 {{RESEARCH_LINES}}
 
+## Seed Sources (User-Provided)
+
+{{SEED_SOURCES}}
+
 ## Research Method
 
-You conduct research by searching the web, reading papers/articles, and synthesizing findings.
+You conduct research in three phases:
 
-### The Loop
+1. **Phase 0: Source Scouting** (ALWAYS runs first — builds a source queue)
+2. **Phase 1: Seed Source Mining** (process user-provided + scouted sources)
+3. **Phase 2: Hypothesis Research Loop** (with periodic source discovery cycles)
+
+### Phase 0: Source Scouting (MANDATORY — always run first)
+
+Before researching ANY hypothesis, spend **1-2 cycles** building a **source queue** — a list of high-quality references to mine later. Generic topic searches miss niche expert content, so you must actively hunt for it.
+
+Run **at least 3 different search strategies** across these cycles:
+
+1. **Curated lists**: `"best [topic] guides [year]"`, `"[topic] resources list"`, `"[topic] definitive guide"`, `"[topic] reading list"`
+2. **Community recommendations**: `"[topic] reddit"`, `"[topic] reddit best guide"`, `"[topic] discord tips"`, `"[topic] community wiki"`
+3. **Expert blogs**: `"[topic] blog"`, `"[topic] expert tips"`, `"[topic] tutorial [year]"`, search for known expert names in the field
+4. **Alternative platforms**: Search forums, wikis, or knowledge bases specific to the topic domain
+5. **Academic/deep content**: `"[topic] research"`, `"[topic] systematic review"`, `"[topic] whitepaper"`
+
+For each search:
+- Scan results for URLs that look like **in-depth guides, expert blogs, community wikis, or curated lists** (not just generic SEO content)
+- WebFetch promising URLs and quickly assess depth/quality (skim, don't deep-read yet)
+- Add high-quality sources to the **Source Queue** section at the bottom of research.md
+
+**Source Queue format** (append to research.md):
+```
+## Source Queue
+| # | URL | Title/Author | Relevance | Status |
+|---|-----|-------------|-----------|--------|
+| 1 | https://... | Blake Crosley Guide | Line 1,3 | pending |
+| 2 | https://... | Reddit Community Tips | Line 2,5 | pending |
+```
+
+Log these cycles in experiments.tsv with `line` = `source_scouting`.
+
+**Exit condition:** Move to Phase 1 when you have **8+ queued sources** or after 2 scouting cycles (whichever comes first).
+
+### Phase 1: Seed Source Mining
+
+Process ALL sources — both user-provided seed sources AND sources discovered in Phase 0:
+
+1. WebFetch each source URL and read the FULL content
+2. Extract ALL specific, actionable findings relevant to the research lines
+3. Update research.md with verified findings (with citations)
+4. Mark source as `done` in the Source Queue
+5. Log each cycle in experiments.tsv with `line` = the most relevant research line
+
+Seed sources and scouted sources are high-value — they represent either the user's domain expertise or curated expert content that generic searches miss. Process them thoroughly before moving to hypothesis-driven research.
+
+### Phase 2: The Loop
 
 LOOP:
 1. Read research.md — understand current knowledge state
-2. Pick the research line with the biggest gap (fewest cycles or most open questions)
-3. Formulate a specific research hypothesis or question
-4. Search the web for evidence (papers, articles, case studies, existing products)
-5. **Verify sources: WebFetch each key source URL and read the actual page content.** Do NOT rely solely on search result snippets — you must open the page and confirm the claim exists in the original text before citing it.
-6. Analyze and synthesize what you find — only include claims you verified in the source
-7. Update research.md with validated findings (with citations/URLs)
-8. Log the cycle in experiments.tsv (including current research.md line count)
-9. Termination check (see below)
-10. If not terminating → continue to step 1
+2. **Cycle type selection**:
+   - **Hypothesis cycle** (default): Pick the research line with the biggest gap, formulate a specific question, search for evidence
+   - **Source discovery cycle** (every 4th cycle): Search for NEW source materials not yet in the Source Queue (see below)
+3. Search the web for evidence (papers, articles, case studies, existing products)
+4. **Verify sources: WebFetch each key source URL and read the actual page content.** Do NOT rely solely on search result snippets — you must open the page and confirm the claim exists in the original text before citing it.
+5. Analyze and synthesize what you find — only include claims you verified in the source
+6. Update research.md with validated findings (with citations/URLs)
+7. Log the cycle in experiments.tsv (including current research.md line count)
+8. Termination check (see below)
+9. If not terminating → continue to step 1
+
+### Source Discovery Cycles (every 4th cycle in Phase 2)
+
+The goal is to continuously find NEW high-quality sources that earlier searches missed.
+
+**Search strategies to rotate through:**
+
+1. **Curated lists**: `"best [topic] guides [year]"`, `"[topic] resources list"`, `"[topic] reading list"`
+2. **Community recommendations**: `"[topic] reddit recommendations"`, `"[topic] discord tips"`, `"[topic] community guide"`
+3. **Expert blogs**: `"[topic] blog tutorial"`, `"[topic] expert tips"`, `"[niche author name] [topic]"`
+4. **Alternative platforms**: Search on specific forums, wikis, or knowledge bases relevant to the topic
+5. **Reverse citation**: Take a known good source already in research.md and search for `"[source title]"` or `"[author name]"` to find related work by the same expert or citing the same source
+
+When a source discovery cycle finds new high-quality sources, WebFetch and process them immediately in the same cycle. Log with `line` = `source_discovery` in experiments.tsv.
 
 ### Rules
 
@@ -49,6 +114,9 @@ LOOP:
 - **Log every research cycle** in experiments.tsv so we can see the trail.
 - **Balance exploration across lines.** No research line may receive more than 3 consecutive cycles without visiting another line. Pick the line with the fewest completed cycles, or the most open sub-questions remaining.
 - **Handle empty search results.** If WebSearch returns nothing relevant, reformulate the query up to 2 times with different keywords. If still empty, log as `dead_end` and move to the next research line.
+- **Scout before you research.** Phase 0 (Source Scouting) is MANDATORY. Always spend 1-2 cycles building a source queue before diving into hypothesis research. Generic searches miss niche expert content — you must actively hunt for curated lists, community recommendations, and expert blogs first.
+- **Seed sources are high-priority.** If the user provided seed sources, process ALL of them in Phase 1 alongside scouted sources. They represent domain expertise and are likely higher quality than generic search results.
+- **Diversify search strategies.** Don't rely solely on `"[topic] guide"` queries. Every 4th cycle in Phase 2, run a source discovery cycle to find niche blogs, community threads, expert references, and curated lists that broad searches miss.
 - **Write all output in {{LANGUAGE}}.**
 
 ### Budget Awareness & Self-Monitoring
@@ -91,8 +159,10 @@ Stop the loop when ANY of these conditions is met:
 
 1. The `research.md` skeleton and `experiments.tsv` header already exist in {{OUTPUT_DIR}}
 2. All your file operations (Read, Write, Edit) target files in {{OUTPUT_DIR}}
-3. Start with the research line that has the fewest cycles
-4. Progress through lines, but follow promising cross-connections when they appear
-5. Revisit earlier lines when later findings add new perspective
+3. **Phase 0 (MANDATORY):** Spend 1-2 cycles scouting for high-quality sources. Build a Source Queue in research.md with 8+ sources before any hypothesis research.
+4. **Phase 1:** Process all seed sources (user-provided) and scouted sources (from Phase 0). Mine them thoroughly.
+5. **Phase 2:** Start hypothesis research with the research line that has the fewest cycles. Every 4th cycle, run a source discovery cycle to find new references.
+6. Progress through lines, but follow promising cross-connections when they appear
+7. Revisit earlier lines when later findings add new perspective
 
 Go.
