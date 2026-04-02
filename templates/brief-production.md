@@ -1,5 +1,11 @@
 # {{TOPIC}} — Research Brief
 > AutoResearch output · {{DATE}} · {{CYCLES}} research cycles · {{SOURCES}} cited sources
+>
+> **Confidence legend:** 🟢 High (3+ agreeing sources) · 🟡 Medium (1-2 sources or mixed) · 🔴 Low (single source or conflicting)
+>
+> All claims use inline citations: `[finding](source_url)`. Unverified claims are marked `[Unverified]`.
+>
+> Note: Translate all section headers and content to the research language ({{LANGUAGE}}). The Chinese headers below are structural templates — adapt them to the output language.
 
 ---
 
@@ -25,8 +31,8 @@
 [Numbered list of concrete next steps]
 
 ## 八、關鍵參考文獻
-| # | Source | Key Insight |
-|---|--------|-------------|
+| # | Source | Key Insight | Confidence |
+|---|--------|-------------|------------|
 
 ---
 
@@ -35,3 +41,4 @@
 - **Runtime:** {{RUNTIME}}
 - **research.md size:** {{RESEARCH_MD_LINES}} lines
 - **Sources cited:** {{SOURCES}}
+- **PIVOT/REFINE decisions:** {{GATE_DECISIONS}}

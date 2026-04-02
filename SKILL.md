@@ -9,10 +9,13 @@ Autonomous research agent. Guides the user through topic setup, then spawns a ba
 
 ## Entry Points
 
-**Primary:** `/omni-research` — full interactive setup flow (Steps 1-7 below)
+**Primary:** `/omni-research` — full interactive setup flow (Steps 0-7 below)
 **Recovery:** `/omni-research brief <path>` — generate BRIEF.md from existing research.md + experiments.tsv at `<path>`. Skip to Step 8.
 
-If args contain a path, check if `<path>/research.md` exists. If yes, go to Step 8. Otherwise, start at Step 1.
+Routing logic:
+- `/omni-research` (no args) → Step 0, then Step 1
+- `/omni-research brief <path>` → Step 8 (requires `<path>/research.md` to exist)
+- `/omni-research <path>` (no `brief` keyword) → check if `<path>/research.md` exists. If yes, treat as recovery (Step 8). If no, treat as primary (Step 0, then Step 1).
 
 ## Configuration
 
@@ -150,20 +153,31 @@ On confirm:
    ### 1.3 [Hypothesis 3]
    ...continue for all lines...
 
-   ## N. Design Recommendations / Actionable Insights
+   ## [Next #]. Design Recommendations / Actionable Insights
    [Practical takeaways]
 
-   ## N+1. Open Questions & Next Directions
+   ## [Next #]. Open Questions & Next Directions
    [What we still don't know]
 
+   ## Source Queue
+   | # | URL | Title/Author | Lines | Authority | Recency | Relevance | Score | Status |
+   |---|-----|-------------|-------|-----------|---------|-----------|-------|--------|
+   
    ## Appendix: Sources
    [Full citation list with URLs]
    ```
 7. Create `experiments.tsv` with header:
    ```
-   cycle	timestamp	line	hypothesis	sources_found	key_finding	status	research_md_lines	next_direction
+   cycle	timestamp	line	hypothesis	sources_found	key_finding	status	research_md_lines	gate_decision	next_direction
    ```
-8. Spawn background agent:
+8. Create `steer.md` with initial content:
+   ```
+   # Steering File
+   Write instructions here to redirect the research agent mid-run.
+   The agent checks this file at the start of every cycle.
+   Examples: "Focus on Line 3 next", "Add this context: ...", "Skip Line 2", "Wrap up soon"
+   ```
+9. Spawn background agent (substitute the actual output directory path for `<output-dir>`):
    ```
    Agent(
      subagent_type: "general-purpose",
@@ -179,6 +193,7 @@ On confirm:
 > **Live files you can check anytime:**
 > - `<output-dir>/research.md` — accumulated knowledge (grows each cycle)
 > - `<output-dir>/experiments.tsv` — experiment log (one row per cycle)
+> - `<output-dir>/steer.md` — **edit this to redirect the agent mid-run** (e.g., "Focus on Line 3", "Add context: ...", "Wrap up soon")
 >
 > When complete, `BRIEF.md` will be generated and I'll show you the summary.
 

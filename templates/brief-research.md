@@ -1,5 +1,11 @@
 # {{TOPIC}} — Research Brief
 > AutoResearch output · {{DATE}} · {{CYCLES}} research cycles · {{SOURCES}} cited sources
+>
+> **Confidence legend:** 🟢 High (3+ agreeing sources) · 🟡 Medium (1-2 sources or mixed) · 🔴 Low (single source or conflicting)
+>
+> All claims use inline citations: `[finding](source_url)`. Unverified claims are marked `[Unverified]`.
+>
+> Note: Translate all section headers and content to the research language ({{LANGUAGE}}). The Chinese headers below are structural templates — adapt them to the output language.
 
 ---
 
@@ -9,13 +15,7 @@
 ## 二、文獻回顧
 [Organized by research line — one sub-section per line]
 
-### Line 1: {{LINE_1_NAME}}
-[Key findings, evidence quality, consensus vs debate]
-
-### Line 2: {{LINE_2_NAME}}
-[Key findings, evidence quality, consensus vs debate]
-
-[...continue for all lines]
+[Create one subsection per research line. For each line, cover: key findings with inline citations, evidence quality assessment, and whether sources show consensus (🟢), mixed evidence (🟡), or conflict (🔴).]
 
 ## 三、已驗證的既有方案
 [Existing solutions, programs, products — what works, what doesn't]
@@ -33,8 +33,8 @@
 [Numbered list of concrete next steps]
 
 ## 八、關鍵參考文獻
-| # | Source | Key Insight |
-|---|--------|-------------|
+| # | Source | Key Insight | Confidence |
+|---|--------|-------------|------------|
 
 ---
 
@@ -43,3 +43,4 @@
 - **Runtime:** {{RUNTIME}}
 - **research.md size:** {{RESEARCH_MD_LINES}} lines
 - **Sources cited:** {{SOURCES}}
+- **PIVOT/REFINE decisions:** {{GATE_DECISIONS}}
