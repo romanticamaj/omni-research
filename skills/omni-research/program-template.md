@@ -174,7 +174,7 @@ Stop the loop when ANY of these conditions is met:
 
 1. **Anti-fabrication pass:** Scan research.md for every inline citation `[text](url)`. For each cited URL, do a quick WebFetch to confirm it resolves and contains content related to the cited claim. Remove or mark `[Unverified]` any citation where the URL is dead or the page does not support the claim. Do NOT generate URLs from memory — only cite URLs you actually visited during research.
 2. Do a final pass on `research.md` — ensure the Executive Summary reflects all findings and that consensus/conflict markers are present for key findings
-3. Read the BRIEF template at `~/.claude/skills/omni-research/templates/brief-{{TOPIC_TYPE}}.md`
+3. Read the BRIEF template at `{{SKILL_DIR}}/templates/brief-{{TOPIC_TYPE}}.md`
 4. Generate `BRIEF.md` following that template structure. Use inline citations throughout (not just an appendix). Include confidence indicators for key conclusions: **High confidence** (3+ agreeing sources), **Medium confidence** (1-2 sources or mixed evidence), **Low confidence** (single source or conflicting evidence).
 5. Fill in Research Stats: cycles completed, estimated runtime, final research.md line count, number of sources cited, number of PIVOT/REFINE decisions made
 6. Return the full content of BRIEF.md as your final message

@@ -21,7 +21,7 @@ Routing logic:
 
 On every `/omni-research` invocation (except `brief`), **before Step 1**, run **Step 0: Resolve Output Directory**.
 
-Config file location: `~/.claude/skills/omni-research/config.json`
+Config file location: `${CLAUDE_PLUGIN_DATA}/config.json`
 
 ```json
 {
@@ -31,7 +31,7 @@ Config file location: `~/.claude/skills/omni-research/config.json`
 
 ### Step 0: Resolve Output Directory
 
-1. Read `~/.claude/skills/omni-research/config.json`
+1. Read `${CLAUDE_PLUGIN_DATA}/config.json` (create the file with `{"output_base_dir": ""}` if it doesn't exist)
 2. If `output_base_dir` is empty or the path does not exist on disk:
    - Ask the user:
      > Where should research reports be saved? Please provide an absolute path to a base directory.
@@ -127,7 +127,7 @@ On confirm:
 
 1. Generate a 4-character random suffix (lowercase alphanumeric)
 2. Create output directory: `<output_base_dir>/YYYY-MM-DD-<slug>-<4char>/` (using the path from Step 0)
-3. Read `~/.claude/skills/omni-research/program-template.md`
+3. Read `${CLAUDE_SKILL_DIR}/program-template.md`
 4. Replace all `{{placeholders}}`:
    - `{{TOPIC}}` → user's topic
    - `{{CONTEXT}}` → accumulated user context from Step 3
@@ -137,6 +137,7 @@ On confirm:
    - `{{LANGUAGE}}` → detected language
    - `{{MAX_CYCLES}}` → from scope selection
    - `{{OUTPUT_DIR}}` → the output directory path
+   - `{{SKILL_DIR}}` → the resolved value of `${CLAUDE_SKILL_DIR}` (so the agent can find templates)
 5. Write `program.md` to output directory
 6. Create `research.md` skeleton:
    ```
@@ -203,7 +204,7 @@ For `/omni-research brief <path>`:
 
 1. Read `<path>/research.md` and `<path>/experiments.tsv`
 2. Detect topic type from `<path>/program.md` (look for `## Topic Type` section value)
-3. Read the matching BRIEF template from `~/.claude/skills/omni-research/templates/brief-<type>.md`
+3. Read the matching BRIEF template from `${CLAUDE_SKILL_DIR}/templates/brief-<type>.md`
 4. Generate BRIEF.md following the template, synthesizing all findings from research.md
 5. Write to `<path>/BRIEF.md`
 6. Display the BRIEF content to the user

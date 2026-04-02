@@ -1,0 +1,18 @@
+{
+  "name": "omni-research",
+  "version": "2.0.0",
+  "description": "Autonomous research agent — give it a topic, it searches the web, verifies sources, synthesizes findings, and produces structured research reports in the background",
+  "author": {
+    "name": "romanticamaj",
+    "url": "https://github.com/romanticamaj"
+  },
+  "repository": "https://github.com/romanticamaj/omni-research",
+  "license": "MIT",
+  "keywords": ["research", "autonomous", "web-search", "deep-research", "background-agent"],
+  "userConfig": {
+    "output_base_dir": {
+      "description": "Directory where research output folders are saved (e.g., ~/research-output)",
+      "sensitive": false
+    }
+  }
+}

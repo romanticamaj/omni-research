@@ -76,7 +76,16 @@ You                          Claude Code                        Background Agent
 
 ## Installation
 
-### 1. Copy the skill to Claude Code's global skills directory
+### Option A: Plugin (recommended)
+
+Install as a Claude Code plugin for auto-updates and easy management:
+
+```
+/plugin marketplace add romanticamaj/omni-research
+/plugin install omni-research
+```
+
+### Option B: Manual
 
 **macOS / Linux:**
 ```bash
@@ -90,22 +99,14 @@ git clone https://github.com/romanticamaj/omni-research.git
 xcopy /E /I omni-research %USERPROFILE%\.claude\skills\omni-research
 ```
 
-### 2. Create the config file
-
-```bash
-cp ~/.claude/skills/omni-research/config.json.example ~/.claude/skills/omni-research/config.json
-```
-
-The first time you run `/omni-research`, it will ask where to save research output and remember your choice.
-
-### 3. Verify
+### Verify
 
 Start a new Claude Code session and type:
 ```
 /omni-research
 ```
 
-You should see the topic prompt. That's it.
+The first time you run it, it will ask where to save research output and remember your choice.
 
 ## Usage
 
@@ -169,14 +170,20 @@ If the session ended early or you want to regenerate the summary:
 
 ```
 omni-research/
-  SKILL.md                # Skill definition (interactive flow)
-  program-template.md     # Template for the autonomous agent's instructions
-  config.json.example     # Example config (copy to config.json)
-  templates/
-    brief-product.md      # BRIEF template for product research
-    brief-marketing.md    # BRIEF template for marketing research
-    brief-production.md   # BRIEF template for production research
-    brief-research.md     # BRIEF template for pure research
+  .claude-plugin/
+    plugin.json             # Plugin manifest (name, version, config schema)
+  skills/
+    omni-research/
+      SKILL.md              # Skill definition (interactive flow)
+      program-template.md   # Template for the autonomous agent's instructions
+      config.json.example   # Example config
+      templates/
+        brief-product.md    # BRIEF template for product research
+        brief-marketing.md  # BRIEF template for marketing research
+        brief-production.md # BRIEF template for production research
+        brief-research.md   # BRIEF template for pure research
+  README.md
+  LICENSE
 ```
 
 ## Requirements
