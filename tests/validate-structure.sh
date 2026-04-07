@@ -91,6 +91,32 @@ else
   fail "plugin version '$VERSION' is not valid semver"
 fi
 
+# userConfig schema validation — the runtime validator requires `type` and `title`
+# for each entry, even though the docs say only `description` is required.
+# Valid types: "string" | "number" | "boolean" | "directory" | "file"
+if grep -q '"userConfig"' "$PLUGIN_JSON"; then
+  # Every userConfig entry needs type, title, description
+  UC_ENTRIES=$(grep -cE '^\s*"[a-z_][a-z0-9_]*": \{' "$PLUGIN_JSON" || true)
+
+  # Check that each of type/title/description appears at least as often as entries
+  for required in type title description; do
+    COUNT=$(grep -c "\"$required\":" "$PLUGIN_JSON" || true)
+    if [[ "$COUNT" -ge 1 ]]; then
+      pass "userConfig has '$required' field"
+    else
+      fail "userConfig missing '$required' field (required at runtime)"
+    fi
+  done
+
+  # Check type value is one of the valid enum values
+  TYPE_VAL=$(grep '"type":' "$PLUGIN_JSON" | head -1 | sed 's/.*"type": *"\([^"]*\)".*/\1/')
+  if [[ "$TYPE_VAL" =~ ^(string|number|boolean|directory|file)$ ]]; then
+    pass "userConfig type '$TYPE_VAL' is valid (one of string/number/boolean/directory/file)"
+  else
+    fail "userConfig type '$TYPE_VAL' is invalid — must be string/number/boolean/directory/file"
+  fi
+fi
+
 echo ""
 
 # ── 2b. marketplace.json validation ──────────────────────────────────

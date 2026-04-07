@@ -1,6 +1,6 @@
 {
   "name": "omni-research",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Autonomous research agent — give it a topic, it searches the web, verifies sources, synthesizes findings, and produces structured research reports in the background",
   "author": {
     "name": "romanticamaj",
@@ -11,6 +11,8 @@
   "keywords": ["research", "autonomous", "web-search", "deep-research", "background-agent"],
   "userConfig": {
     "output_base_dir": {
+      "type": "directory",
+      "title": "Research output directory",
       "description": "Directory where research output folders are saved (e.g., ~/research-output)",
       "sensitive": false
     }

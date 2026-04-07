@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.0.2 — 2026-04-07
+
+### Fixed
+- Added required `type` and `title` fields to `userConfig.output_base_dir` in `plugin.json`.
+  Without these, `/plugin install` failed with "Invalid option: expected one of string/number/boolean/directory/file"
+  and "title: expected string, received undefined". The runtime validator is stricter than the documented schema.
+
+### Added
+- `tests/validate-structure.sh` now checks `userConfig` entries for required `type`, `title`, `description`
+  fields and validates that `type` is one of the 5 allowed enum values (77 total checks, all passing).
+
 ## 2.0.1 — 2026-04-07
 
 ### Fixed

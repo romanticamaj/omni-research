@@ -5,14 +5,14 @@
   },
   "metadata": {
     "description": "Self-hosted marketplace for the Omni-Research autonomous research agent plugin",
-    "version": "2.0.1"
+    "version": "2.0.2"
   },
   "plugins": [
     {
       "name": "omni-research",
       "source": "./",
       "description": "Autonomous research agent — give it a topic, it searches the web, verifies sources, synthesizes findings, and produces structured research reports in the background",
-      "version": "2.0.1",
+      "version": "2.0.2",
       "author": {
         "name": "romanticamaj"
       },
