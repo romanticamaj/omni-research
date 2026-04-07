@@ -1,6 +1,6 @@
 {
   "name": "omni-research",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Autonomous research agent — give it a topic, it searches the web, verifies sources, synthesizes findings, and produces structured research reports in the background",
   "author": {
     "name": "romanticamaj",

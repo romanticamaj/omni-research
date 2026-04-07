@@ -78,12 +78,14 @@ You                          Claude Code                        Background Agent
 
 ### Option A: Plugin (recommended)
 
-Install as a Claude Code plugin for auto-updates and easy management:
+Install as a Claude Code plugin for auto-updates and easy management. This repo is a self-hosted marketplace — add it once, then install the plugin:
 
 ```
 /plugin marketplace add romanticamaj/omni-research
-/plugin install omni-research
+/plugin install omni-research@omni-research-marketplace
 ```
+
+Then restart Claude Code. Verify with `/plugin list`.
 
 ### Option B: Manual
 

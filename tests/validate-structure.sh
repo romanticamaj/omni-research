@@ -25,6 +25,10 @@ echo "--- 1. Plugin Structure ---"
   && pass "plugin.json exists" \
   || fail "plugin.json missing at .claude-plugin/plugin.json"
 
+[[ -f "$REPO_ROOT/.claude-plugin/marketplace.json" ]] \
+  && pass "marketplace.json exists (self-hosted marketplace)" \
+  || fail "marketplace.json missing — users can't install via /plugin marketplace add"
+
 [[ -f "$SKILL_DIR/SKILL.md" ]] \
   && pass "SKILL.md exists" \
   || fail "SKILL.md missing at skills/omni-research/SKILL.md"
@@ -85,6 +89,55 @@ if [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
   pass "plugin version '$VERSION' is valid semver"
 else
   fail "plugin version '$VERSION' is not valid semver"
+fi
+
+echo ""
+
+# ── 2b. marketplace.json validation ──────────────────────────────────
+echo "--- 2b. marketplace.json Validation ---"
+
+MARKETPLACE_JSON="$REPO_ROOT/.claude-plugin/marketplace.json"
+
+if [[ -f "$MARKETPLACE_JSON" ]]; then
+  # Required top-level fields
+  for field in name owner plugins; do
+    if grep -q "\"$field\"" "$MARKETPLACE_JSON"; then
+      pass "marketplace.json has '$field' field"
+    else
+      fail "marketplace.json missing '$field' field"
+    fi
+  done
+
+  # owner.name required
+  if grep -A2 '"owner"' "$MARKETPLACE_JSON" | grep -q '"name"'; then
+    pass "marketplace.json owner has 'name' field"
+  else
+    fail "marketplace.json owner missing 'name' field"
+  fi
+
+  # plugins array has at least one entry with required fields
+  if grep -q '"source"' "$MARKETPLACE_JSON"; then
+    pass "marketplace.json has plugin 'source' field"
+  else
+    fail "marketplace.json plugin entry missing 'source' field"
+  fi
+
+  # Self-hosted pattern: source should be "./"
+  if grep -q '"source": "\./"' "$MARKETPLACE_JSON"; then
+    pass "marketplace.json uses self-hosted pattern (source: ./)"
+  else
+    warn "marketplace.json source is not './' — verify this is intentional"
+  fi
+
+  # Version sync between plugin.json and marketplace.json
+  MP_PLUGIN_VERSION=$(grep -A20 '"plugins"' "$MARKETPLACE_JSON" | grep '"version"' | head -1 | sed 's/.*: *"\([^"]*\)".*/\1/')
+  if [[ "$MP_PLUGIN_VERSION" == "$VERSION" ]]; then
+    pass "marketplace.json plugin version matches plugin.json ($VERSION)"
+  else
+    fail "Version mismatch: plugin.json=$VERSION, marketplace.json=$MP_PLUGIN_VERSION"
+  fi
+else
+  fail "marketplace.json not found — cannot validate"
 fi
 
 echo ""

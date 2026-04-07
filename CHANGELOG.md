@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.0.1 — 2026-04-07
+
+### Fixed
+- Added `.claude-plugin/marketplace.json` so the repo works as a self-hosted marketplace.
+  Previously `/plugin marketplace add romanticamaj/omni-research` failed with "marketplace.json not found"
+  because Claude Code's `marketplace add` command requires a marketplace manifest, not a plugin manifest.
+- Updated README install instructions to include `@omni-research-marketplace` suffix.
+
+### Added
+- Test suite now validates `marketplace.json` structure and checks version sync between
+  `plugin.json` and `marketplace.json`.
+
 ## 2.0.0 — 2026-04-02
 
 **Plugin conversion** — omni-research is now a Claude Code plugin with versioning, auto-updates, and marketplace distribution.
