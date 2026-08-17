@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.1.0 — 2026-08-17
+
+### Added
+- GitHub Release workflow with strict `vX.Y.Z` version validation.
+- `scripts/set-version.py` to synchronize version metadata across plugin and marketplace manifests.
+- `scripts/check-release-version.sh` to reject mismatches between a GitHub Release tag and repository manifest versions.
+- GitHub Release badge and documented release process in README.
+- Mole architecture comparison and staged research-runtime roadmap in `docs/research/mole-comparison.md`.
+
+### Changed
+- Reprioritized the roadmap around deterministic evidence verification, output validation, work budgets, and an eventual MCP-based Omni Research Core before broader distribution work.
+- GitHub Releases are now the published-version boundary; manifest version fields are validated mirrors that must match the release tag.
+
 ## 2.0.2 — 2026-04-07
 
 ### Fixed
