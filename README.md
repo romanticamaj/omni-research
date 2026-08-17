@@ -2,6 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Claude Code Skill](https://img.shields.io/badge/Claude%20Code-Skill-blueviolet)](https://docs.anthropic.com/en/docs/claude-code)
+[![GitHub Release](https://img.shields.io/github/v/release/romanticamaj/omni-research?display_name=tag)](https://github.com/romanticamaj/omni-research/releases)
 
 Autonomous research agent skill for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Give it a topic, and it autonomously searches the web, verifies sources, synthesizes findings, and produces a structured research report — all running in the background while you continue working.
 
@@ -173,7 +174,15 @@ If the session ended early or you want to regenerate the summary:
 ```
 omni-research/
   .claude-plugin/
-    plugin.json             # Plugin manifest (name, version, config schema)
+    plugin.json             # Plugin manifest (includes release version)
+    marketplace.json        # Self-hosted marketplace metadata (version mirrored)
+  .github/workflows/
+    release.yml             # Validated GitHub Release publisher
+  docs/research/
+    mole-comparison.md      # Research-runtime comparison and staged roadmap
+  scripts/
+    set-version.py          # Update all manifest version copies
+    check-release-version.sh# Verify vX.Y.Z release tag matches manifests
   skills/
     omni-research/
       SKILL.md              # Skill definition (interactive flow)
@@ -185,8 +194,35 @@ omni-research/
         brief-production.md # BRIEF template for production research
         brief-research.md   # BRIEF template for pure research
   README.md
+  TODO.md
   LICENSE
 ```
+
+## Versioning & Releases
+
+Published versions are GitHub Releases using strict `vX.Y.Z` semantic-version tags.
+
+The GitHub Release tag is the **published version boundary**. The version stored in `.claude-plugin/plugin.json` and both version fields in `.claude-plugin/marketplace.json` are validated mirrors of that published version.
+
+To prepare a release:
+
+```bash
+python3 scripts/set-version.py 2.1.0
+bash tests/validate-structure.sh
+bash scripts/check-release-version.sh v2.1.0
+```
+
+Commit and merge the manifest changes first. Then run the **Release** GitHub Action from `master` with `version=2.1.0`. The workflow validates repository structure and version consistency before creating `v2.1.0` with generated release notes.
+
+A manually published GitHub Release is also checked after publication; a tag that does not match the manifest version will fail the release validation workflow.
+
+## Research Runtime Roadmap
+
+Omni-Research remains a Skill-first research harness, but reliability guarantees will progressively move into deterministic tools. The design direction and Mole comparison are documented in [`docs/research/mole-comparison.md`](docs/research/mole-comparison.md), with implementation priority tracked in [`TODO.md`](TODO.md).
+
+Core principle:
+
+> **Prompt owns reasoning. Code owns invariants.**
 
 ## Requirements
 
