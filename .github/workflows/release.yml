@@ -38,6 +38,9 @@ jobs:
       - name: Validate repository structure
         run: bash tests/validate-structure.sh
 
+      - name: Run deterministic evidence tests
+        run: python3 -m unittest discover -s tests -p 'test_*.py'
+
       - name: Validate release version
         run: bash scripts/check-release-version.sh "v${{ inputs.version }}"
 
@@ -76,3 +79,6 @@ jobs:
 
       - name: Validate published release version
         run: bash scripts/check-release-version.sh "${{ github.event.release.tag_name }}"
+
+      - name: Run deterministic evidence tests
+        run: python3 -m unittest discover -s tests -p 'test_*.py'
