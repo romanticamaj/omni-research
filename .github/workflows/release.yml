@@ -1,0 +1,78 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version without v prefix (for example 2.1.0)"
+        required: true
+        type: string
+      prerelease:
+        description: "Publish as a prerelease"
+        required: false
+        default: false
+        type: boolean
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require default branch
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF}" != "refs/heads/master" ]]; then
+            echo "Release workflow must run from master; got ${GITHUB_REF}" >&2
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate repository structure
+        run: bash tests/validate-structure.sh
+
+      - name: Validate release version
+        run: bash scripts/check-release-version.sh "v${{ inputs.version }}"
+
+      - name: Ensure tag does not already exist
+        shell: bash
+        run: |
+          if git rev-parse "v${{ inputs.version }}" >/dev/null 2>&1; then
+            echo "tag v${{ inputs.version }} already exists" >&2
+            exit 1
+          fi
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PRERELEASE: ${{ inputs.prerelease }}
+        shell: bash
+        run: |
+          args=(
+            "v${{ inputs.version }}"
+            --target "${GITHUB_SHA}"
+            --title "v${{ inputs.version }}"
+            --generate-notes
+          )
+          if [[ "${PRERELEASE}" == "true" ]]; then
+            args+=(--prerelease)
+          fi
+          gh release create "${args[@]}"
+
+  validate-published-release:
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - name: Validate published release version
+        run: bash scripts/check-release-version.sh "${{ github.event.release.tag_name }}"
